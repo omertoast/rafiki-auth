@@ -23,3 +23,24 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.get('/', async () => {
   return { hello: 'world' }
 })
+
+// Admin Routes
+Route.resource('grant', 'GrantsController').apiOnly()
+Route.resource('token', 'TokensController').apiOnly()
+Route.resource('interaction', 'InteractionController').apiOnly()
+
+// GNAP
+Route.group(() => {
+  Route.post('/', 'GnapController.requestGrant')
+  Route.post('/continue/:grant', 'GnapController.continueGrant')
+  Route.patch('/continue/:grant', 'GnapController.updateGrant')
+  Route.delete('/continue/:grant', 'GnapController.revokeGrant')
+  Route.post('/token/:token', 'GnapController.rotateToken' )
+  Route.delete('/token/:token', 'GnapController.revokeToken' )
+}).prefix('/gnap')
+
+Route.group(() => {
+  Route.get('/', 'IntrospectController.introspect')
+}).prefix('/introspect')
+
+
