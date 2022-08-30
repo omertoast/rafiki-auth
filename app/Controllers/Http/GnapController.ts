@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
+// GnapController sits behind the '/gnap' route to handle the implementation of the GNAP protocol
 export default class GnapController {
 
   // https://www.ietf.org/archive/id/draft-ietf-gnap-core-protocol-10.html#name-requesting-access
