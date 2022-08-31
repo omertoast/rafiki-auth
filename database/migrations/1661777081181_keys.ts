@@ -1,20 +1,21 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'access_tokens'
+  protected tableName = 'keys'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.uuid('id').notNullable().primary()
-      table.uuid('grant_id').references('id').inTable('grants')
 
-      table.string('value').notNullable().unique()
-      table.uuid('management_id').notNullable().unique()
-      table.integer('expires_in').notNullable()
-  
+      // TODO - Unique constraint (and index?) on (client_id, kid)
+
+      table.uuid('id').notNullable().primary()
+      table.uuid('client_id').references('id').inTable('clients').onDelete('CASCADE')
+      
+      table.string('kid').notNullable()
+      table.json('jwk').notNullable()
+
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
-
     })
   }
 

@@ -4,13 +4,13 @@ import { BaseModel, BelongsTo, belongsTo, column, beforeCreate } from '@ioc:Adon
 import Grant from './Grant'
 
 export default class GrantAccess extends BaseModel {
-  @beforeCreate()
-  public static assignUuid(grant: Grant) {
-    grant.id = uuid()
-  }
 
-  @belongsTo(() => Grant)
-  public grant: BelongsTo<typeof Grant>
+  public static selfAssignPrimaryKey = true
+
+  @beforeCreate()
+  public static assignUuid(grantAccess: GrantAccess) {
+    grantAccess.id = uuid()
+  }
 
   @column({ isPrimary: true })
   public id: string
@@ -32,6 +32,16 @@ export default class GrantAccess extends BaseModel {
 
   @column() // Jsonb
   public limits: any
+
+  // Relations
+
+  @column()
+  public grantId: string
+
+  @belongsTo(() => Grant)
+  public grant: BelongsTo<typeof Grant>
+
+  // Timestamps
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

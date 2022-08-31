@@ -1,5 +1,17 @@
 {
   "commands": {
+    "debug": {
+      "settings": {
+        "loadApp": false,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/Debug",
+      "commandName": "debug",
+      "description": "Executes random code in the Debug.ts file",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "dump:rcfile": {
       "settings": {},
       "commandPath": "@adonisjs/core/build/commands/DumpRc",

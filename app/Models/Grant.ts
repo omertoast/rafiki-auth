@@ -1,8 +1,9 @@
 import { v4 as uuid } from 'uuid'
 import { DateTime } from 'luxon'
-import { BaseModel, column, beforeCreate, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, beforeCreate, hasMany, HasMany, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import GrantAccess from './GrantAccess'
 import AccessToken from './AccessToken'
+import Client from './Client'
 
 export default class Grant extends BaseModel {
 
@@ -40,9 +41,6 @@ export default class Grant extends BaseModel {
   @column() // Not Nullable
   public clientNonce: string
 
-  @column() // Not Nullable
-  public clientKeyId: string
-
   @column() // Not Nullable - Unique
   public interactId: string
 
@@ -52,6 +50,15 @@ export default class Grant extends BaseModel {
   @column() // Not Nullable - Unique
   public interactNonce: string
 
+
+  // Relations
+
+  @column()
+  public clientId: string
+
+  @belongsTo(() => Client)
+  public client: BelongsTo<typeof Client>
+  
   @hasMany(() => GrantAccess, {
     serializeAs: 'access'
   })
@@ -61,6 +68,8 @@ export default class Grant extends BaseModel {
     serializeAs: null
   })
   public accessTokens: HasMany<typeof AccessToken>
+
+  // Timestamps
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

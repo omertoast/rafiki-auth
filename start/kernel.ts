@@ -38,4 +38,7 @@ Server.middleware.register([() => import('@ioc:Adonis/Core/BodyParser')])
 | Route.get('dashboard', 'UserController.dashboard').middleware('auth')
 |
 */
-Server.middleware.registerNamed({})
+Server.middleware.registerNamed({
+  'identify_client' : () => import('../app/Middleware/IdentifyGnapClient'),
+  'verify_signature': () => import('../app/Middleware/HttpRequestSignatureVerification') 
+})

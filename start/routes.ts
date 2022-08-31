@@ -32,9 +32,9 @@ Route.resource('interaction', 'InteractionController').apiOnly()
 // GNAP
 Route.group(() => {
   Route.post('/', 'GnapController.requestGrant')
-  Route.post('/continue/:grant', 'GnapController.continueGrant')
-  Route.patch('/continue/:grant', 'GnapController.updateGrant')
-  Route.delete('/continue/:grant', 'GnapController.revokeGrant')
+  Route.post('/continue/:continueId', 'GnapController.continueGrant')
+  Route.patch('/continue/:continueId', 'GnapController.updateGrant')
+  Route.delete('/continue/:continueId', 'GnapController.revokeGrant')
   Route.post('/token/:token', 'GnapController.rotateToken' )
   Route.delete('/token/:token', 'GnapController.revokeToken' )
 }).prefix('/gnap')
