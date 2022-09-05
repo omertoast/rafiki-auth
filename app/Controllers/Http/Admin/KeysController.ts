@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-// TokensController sits behind the '/grants' route to handle admin functions on the grants
-export default class GrantsController {
+
+export default class KeysController {
   public async index({}: HttpContextContract) {}
 
   public async store({}: HttpContextContract) {}

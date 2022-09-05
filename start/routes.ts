@@ -20,27 +20,65 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
-
 // Admin Routes
-Route.resource('grant', 'GrantsController').apiOnly()
-Route.resource('token', 'TokensController').apiOnly()
-Route.resource('interaction', 'InteractionController').apiOnly()
+// TODO - secure admin routes
+Route.group(() => {
+  Route.resource('clients', 'ClientsController').apiOnly()
+  Route.shallowResource('clients.keys', 'KeysController').apiOnly()
+  Route.resource('grants', 'GrantsController').apiOnly()
+  Route.resource('tokens', 'TokensController').apiOnly()
+})
+.prefix('/admin')
+.namespace('App/Controllers/Http/Admin')
 
-// GNAP
+/**
+ * These routes handle the GNAP protocol
+ */
 Route.group(() => {
   Route.post('/', 'GnapController.requestGrant')
-  Route.post('/continue/:continueId', 'GnapController.continueGrant')
-  Route.patch('/continue/:continueId', 'GnapController.updateGrant')
-  Route.delete('/continue/:continueId', 'GnapController.revokeGrant')
-  Route.post('/token/:token', 'GnapController.rotateToken' )
-  Route.delete('/token/:token', 'GnapController.revokeToken' )
-}).prefix('/gnap')
+  .middleware('client:init')
+  .middleware('signature')
+
+  Route.group(() => {
+    Route.post('/continue/:id', 'GnapController.continueGrant')
+    Route.patch('/continue/:id', 'GnapController.updateGrant')
+    Route.delete('/continue/:id', 'GnapController.revokeGrant')
+  })
+  .middleware('client:continue')
+  .middleware('signature')
+
+  Route.post('/token/:id', 'GnapController.rotateToken' )
+  Route.delete('/token/:id', 'GnapController.revokeToken' )
+  .middleware('client:token')
+  .middleware('signature')
+
+})
+.prefix('/gnap')
+.namespace('App/Controllers/Http/Gnap')
+
+/**
+ * These routes are for interactions between the AS and the IdP
+ * 
+ */
+Route.group(() => {
+  Route.group(() => {
+    Route.get('/interact/:id/start/:nonce', 'InteractionsController.start')
+    Route.get('/interact/:id/finish/:nonce', 'InteractionsController.finish')
+  })
+  .prefix('/frontend')
+  
+  Route.group(() => {
+    Route.get('/interact/:interact', 'ConsentController.start')
+    Route.post('/interact/:interact', 'ConsentController.finish')
+  })
+  .prefix('/backend')
+})
+.namespace('App/Controllers/Http/IdentityProvider')
 
 Route.group(() => {
   Route.get('/', 'IntrospectController.introspect')
-}).prefix('/introspect')
+})
+.prefix('/introspect')
+.namespace('App/Controllers/Http/ResourceServer')
 
 

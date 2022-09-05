@@ -39,6 +39,6 @@ Server.middleware.register([() => import('@ioc:Adonis/Core/BodyParser')])
 |
 */
 Server.middleware.registerNamed({
-  'identify_client' : () => import('../app/Middleware/IdentifyGnapClient'),
-  'verify_signature': () => import('../app/Middleware/HttpRequestSignatureVerification') 
+  'client' : () => import('../app/Middleware/GnapIdentifyClient'),
+  'signature': () => import('../app/Middleware/GnapSignatureValidation') 
 })

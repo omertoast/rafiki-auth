@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-// InteractionsController sits behind the '/interactions' route to handle admin functions on the interactions
-export default class InteractionsController {
+// GrantsController sits behind the '/admin/grants' route to handle admin functions on the grants
+export default class GrantsController {
   public async index({}: HttpContextContract) {}
 
   public async store({}: HttpContextContract) {}
@@ -11,4 +11,5 @@ export default class InteractionsController {
   public async update({}: HttpContextContract) {}
 
   public async destroy({}: HttpContextContract) {}
+
 }

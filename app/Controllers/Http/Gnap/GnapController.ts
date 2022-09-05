@@ -21,5 +21,4 @@ export default class GnapController {
   // https://www.ietf.org/archive/id/draft-ietf-gnap-core-protocol-10.html#name-revoking-the-access-token
   public async revokeToken({}: HttpContextContract) {}
 
-  
 }

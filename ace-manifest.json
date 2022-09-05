@@ -2,7 +2,7 @@
   "commands": {
     "debug": {
       "settings": {
-        "loadApp": false,
+        "loadApp": true,
         "stayAlive": false
       },
       "commandPath": "./commands/Debug",
