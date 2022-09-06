@@ -2,7 +2,7 @@ import { Exception } from '@adonisjs/core/build/standalone'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Config from '@ioc:Adonis/Core/Config'
 
-import { httpis, RequestLike } from 'http-message-signatures'
+import { httpis, RequestLike, verifyContentDigest} from 'http-message-signatures'
 import { verify, KeyLike, createHash } from 'crypto'
 import { importJWK, JWK } from 'jose'
 
@@ -52,7 +52,7 @@ export default class GnapSignatureValidation {
     }
 
     // Verify the content digest
-    verifyContentDigest(ctx)
+    verifyContentDigest(requestLike(ctx))
 
     // Loop through all signatures on the request and verify them
     // TODO - We might want to change this logic to only require one match against the client which is verified
@@ -124,26 +124,4 @@ function requestLike({ request } : HttpContextContract): RequestLike {
     url: request.completeUrl(),
     body: request.raw() || undefined
   }
-}
-
-function verifyContentDigest({ request }: HttpContextContract) {
-  const digestHeaderString = request.header('content-digest')
-  if(!digestHeaderString){
-    throw new Error('No content-digest header in request.')
-  }
-
-  const digests = digestHeaderString.split(',')
-  return digests.map(async (digestHeader) => {
-    const [key, value] = digestHeader.split('=')
-    const algo = key.trim().replace('-','')
-    if (!value.startsWith(':') || !value.endsWith(':')) {
-      throw new Error('Error parsing digest value')
-    }
-    if(algo !== 'sha256' && algo !== 'sha512') {
-      throw new Error(`Unsupported hash algorithm '${key} used for content digest`)
-    }
-    const digest = value.substring(1, value.length - 1)
-    const hash = createHash(algo).update(request.raw() || '').digest('base64')
-    return digest === hash
-  }).every(isValid => isValid)
 }
