@@ -96,14 +96,20 @@ It can be setup by simply running pnpm install.
 
 Until [this PR](https://github.com/dhensby/node-http-message-signatures/pull/3) is merged you'll need a local copy of the http-message-signatures package in the same parent folder as this one.
 
+It's also necessary to create a `tmp` folder where the SQLite db file will reside.
+
+
 
 ```shell
-git clone https://github.com/adrianhopebailie/node-http-message-signatures/tree/ahb-verifiy
+git clone https://github.com/interledger/http-message-signatures
 git clone https://github.com/adrianhopebailie/rafiki-auth
 cd rafiki-auth
 pnpm i
 cp .env.example .env
-node ace serve -w
+mkdir tmp
+node ace migration:run
+node ace db:seed
+node ace test
 ```
 
 Use [ACE](https://docs.adonisjs.com/guides/ace-commandline) to run a dev server with a local Sqlite DB.
