@@ -16,12 +16,7 @@
     ],
     "plugins": [
       "prettier"
-    ],
-    "rules": {
-      "prettier/prettier": [
-        "error"
-      ]
-    }
+    ]
   },
   "eslintIgnore": [
     "build"
