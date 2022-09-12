@@ -53,6 +53,7 @@ Route.group(() => {
   .middleware('signature')
 
 })
+.middleware('json-only')
 .prefix('/gnap')
 .namespace('App/Controllers/Http/Gnap')
 

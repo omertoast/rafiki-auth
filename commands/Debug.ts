@@ -37,8 +37,8 @@ export default class Debug extends BaseCommand {
           .where('continue_id', '8f844308-be86-4c1b-b6a6-9f7910e8ac6c')
           .where('continue_token', 'CONTINUE-1')
       })
-      .first()    
+      .first()
       
-    console.log(test!.toJSON())
+    console.log(test)
   }
 }

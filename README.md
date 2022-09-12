@@ -102,6 +102,15 @@ It's also necessary to create a `tmp` folder where the SQLite db file will resid
 
 ```shell
 git clone https://github.com/interledger/http-message-signatures
+cd http-message-signatures
+npm i
+npm run build
+cd ..
+git clone https://github.com/interledger/structured-headers
+cd http-message-signatures
+npm i
+npm run build
+cd ..
 git clone https://github.com/adrianhopebailie/rafiki-auth
 cd rafiki-auth
 pnpm i
