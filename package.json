@@ -7,7 +7,8 @@
     "build": "node ace build --production",
     "start": "node server.js",
     "lint": "eslint . --ext=.ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "generate:schema": "openapi-typescript ./auth-open-payments-spec.yaml --output auth-open-payments-schema.ts"
   },
   "eslintConfig": {
     "extends": [
