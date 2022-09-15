@@ -52,6 +52,7 @@
     "@adonisjs/core": "^5.8.6",
     "@adonisjs/lucid": "^18.1.0",
     "@adonisjs/repl": "^3.1.11",
+    "openapi": "file:../rafiki/packages/openapi",
     "http-message-signatures": "file:../http-message-signatures",
     "jose": "^4.9.2",
     "luxon": "^3.0.3",
