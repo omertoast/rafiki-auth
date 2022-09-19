@@ -42,8 +42,6 @@ Route.group(() => {
     Route.patch('/continue/:id', 'GnapController.updateGrant')
     Route.delete('/continue/:id', 'GnapController.revokeGrant')
   })
-  .middleware('client:continue')
-  .middleware('signature')
 
   Route.post('/token/:id', 'GnapController.rotateToken' )
   Route.delete('/token/:id', 'GnapController.revokeToken' )

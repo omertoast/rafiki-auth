@@ -54,7 +54,19 @@ test('request grant', async ({ client }) => {
   const response = await client.post('/gnap',).headers({
     'Content-Type': 'application/json',
     'Accepts': 'application/json'
+  }).json(BASE_GRANT_REQUEST)
+
+  console.log(response.body())
+
+  response.assertStatus(200)
+})
+
+test('continue grant', async ({ client }) => {
+  const response = await client.post('/gnap/continue/1',).headers({
+    'Content-Type': 'application/json',
+    'Accepts': 'application/json'
   }).json({
+    invalid_body: "12312"
   })
 
   console.log(response.body())

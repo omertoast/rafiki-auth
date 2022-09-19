@@ -4,11 +4,14 @@ import { NewService } from './service'
 export default class AppProvider {
   constructor(protected app: ApplicationContract) {}
 
-  public register() {
-		this.app.container.singleton('Rafiki/Auth/RequestValidator', () => {
-			return NewService()
+  public async register() {
+		const RequestValidator = await NewService({
+			specPath: './app/Services/requestValidator/spec/auth-open-payments-spec.yaml',
 		})
 
+		this.app.container.singleton('Rafiki/Auth/RequestValidator', () => {
+			return RequestValidator
+		})
   }
 
   public async boot() {
