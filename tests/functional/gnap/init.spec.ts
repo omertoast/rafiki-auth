@@ -54,9 +54,8 @@ test('request grant', async ({ client }) => {
   const response = await client.post('/gnap',).headers({
     'Content-Type': 'application/json',
     'Accepts': 'application/json'
-  }).json(
-    BASE_GRANT_REQUEST
-  )
+  }).json({
+  })
 
   console.log(response.body())
 

@@ -36,8 +36,6 @@ Route.group(() => {
  */
 Route.group(() => {
   Route.post('/', 'GnapController.requestGrant')
-  .middleware('client:init')
-  .middleware('signature')
 
   Route.group(() => {
     Route.post('/continue/:id', 'GnapController.continueGrant')
