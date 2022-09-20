@@ -4,7 +4,8 @@ import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext"
 
 interface ServiceDependencies {
 	spec: OpenAPI,
-	requestValidators: Map<PathMethod, ValidateFunction<openapiTypes.OpenAPI.Request>>
+	requestValidators: Map<PathMethod, ValidateFunction<openapiTypes.OpenAPI.Request>>,
+	responseValidators: Map<PathMethod, ValidateFunction<unknown>>
 }
 
 interface ServiceArgs {
@@ -18,6 +19,7 @@ interface PathMethod {
 
 export interface RequestValidatorService {
 	validateRequest: <T>(ctx: HttpContextContract) => Promise<T>
+	validateResponse: <T>(ctx: HttpContextContract) => Promise<T>
 }
 
 // TODO:
@@ -27,14 +29,24 @@ export const NewService = async (args: ServiceArgs): Promise<RequestValidatorSer
 	const spec = await createOpenAPI(args.specPath)
 
 	const requestValidators = new Map<PathMethod, ValidateFunction<openapiTypes.OpenAPI.Request>>()
+	const responseValidators = new Map<PathMethod, ValidateFunction<unknown>>()
 
 	Object.keys(spec.paths).forEach((path) => {
 		Object.keys(spec.paths[path]).forEach((method) => {
 			if (method === 'parameters') return
+
 			requestValidators.set({
 				path,
 				method: method.toUpperCase()
 			}, spec.createRequestValidator<openapiTypes.OpenAPI.Request>({
+				path,
+				method: method as HttpMethod
+			}))
+
+			responseValidators.set({
+				path,
+				method: method.toUpperCase()
+			}, spec.createResponseValidator({
 				path,
 				method: method as HttpMethod
 			}))
@@ -43,11 +55,13 @@ export const NewService = async (args: ServiceArgs): Promise<RequestValidatorSer
 
 	const deps: ServiceDependencies = {
 		spec,
-		requestValidators
+		requestValidators,
+		responseValidators
 	}
 
 	return {
-		validateRequest: <T>(ctx: HttpContextContract) => validateRequest<T>(deps, ctx)
+		validateRequest: <T>(ctx: HttpContextContract) => validateRequest<T>(deps, ctx),
+		validateResponse: <T>(ctx: HttpContextContract) => validateResponse<T>(deps, ctx)
 	}
 }
 
@@ -77,6 +91,30 @@ const validateRequest = async <T>(deps: ServiceDependencies, ctx: HttpContextCon
 			throw new Error('invalid request')
 		}
 		return request.body() as T
+	} catch (errors) {
+		throw errors
+	}
+}
+
+const validateResponse = async <T>(deps: ServiceDependencies, ctx: HttpContextContract): Promise<T> => {
+	const { request, response, route } = ctx
+	const path = routeToPath(route?.pattern || '')
+
+	const responseValidator = deps.responseValidators.get({
+		path: path,
+		method: request.method()
+	})
+
+	if (!responseValidator) {
+		throw new Error('no response validator found')
+	}
+
+	try {
+		const isValid = responseValidator(response.response)
+		if (!isValid) {
+			throw new Error('invalid response')
+		}
+		return response.getBody() as T
 	} catch (errors) {
 		throw errors
 	}
