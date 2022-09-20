@@ -1,12 +1,12 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import RequestValidator from '@ioc:Rafiki/Auth/RequestValidator';
-import { operations, paths } from 'App/Services/requestValidator/spec/auth-open-payments-schema';
+import { paths } from 'App/Services/requestValidator/spec/auth-open-payments-schema';
 
 // GnapController sits behind the '/gnap' route to handle the implementation of the GNAP protocol
 export default class GnapController {
   // https://www.ietf.org/archive/id/draft-ietf-gnap-core-protocol-10.html#name-requesting-access
   public async requestGrant(ctx: HttpContextContract) {
-    const body = await RequestValidator.requestValidator<RequestGrantBody>(ctx)
+    const body = await RequestValidator.validateRequest<RequestGrantBody>(ctx)
       .catch((errors) => {
         throw {
           errorCode: 'invalid_request',
@@ -19,7 +19,7 @@ export default class GnapController {
 
   // https://www.ietf.org/archive/id/draft-ietf-gnap-core-protocol-10.html#name-continuing-a-grant-request
   public async continueGrant(ctx: HttpContextContract) {
-    const body = await RequestValidator.requestValidator<ContinueGrantBody>(ctx)
+    const body = await RequestValidator.validateRequest<ContinueGrantBody>(ctx)
       .catch((errors) => {
         throw {
           errorCode: 'invalid_request',
@@ -44,5 +44,5 @@ export default class GnapController {
 
 }
 
-type RequestGrantBody = operations['post']['requestBody']['content']['application/json']
+type RequestGrantBody = paths['/']['post']['requestBody']['content']['application/json']
 type ContinueGrantBody = paths['/continue/{id}']['post']['requestBody']['content']['application/json']

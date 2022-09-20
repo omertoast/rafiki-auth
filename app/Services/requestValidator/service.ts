@@ -17,7 +17,7 @@ interface PathMethod {
 }
 
 export interface RequestValidatorService {
-	requestValidator: <T>(ctx: HttpContextContract) => Promise<T>
+	validateRequest: <T>(ctx: HttpContextContract) => Promise<T>
 }
 
 // TODO:
@@ -47,11 +47,11 @@ export const NewService = async (args: ServiceArgs): Promise<RequestValidatorSer
 	}
 
 	return {
-		requestValidator: <T>(ctx: HttpContextContract) => requestValidator<T>(deps, ctx)
+		validateRequest: <T>(ctx: HttpContextContract) => validateRequest<T>(deps, ctx)
 	}
 }
 
-const requestValidator = async <T>(deps: ServiceDependencies, ctx: HttpContextContract): Promise<T> => {
+const validateRequest = async <T>(deps: ServiceDependencies, ctx: HttpContextContract): Promise<T> => {
 	const { request, route } = ctx
 	const path = routeToPath(route?.pattern || '')
 

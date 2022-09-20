@@ -8,7 +8,7 @@
     "start": "node server.js",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write .",
-    "generate:schema": "openapi-typescript ./auth-open-payments-spec.yaml --output auth-open-payments-schema.ts"
+    "generate:schema": "openapi-typescript ./app/Services/requestValidator/spec/auth-open-payments-spec.yaml --output ./app/Services/requestValidator/spec/auth-open-payments-schema.ts"
   },
   "eslintConfig": {
     "extends": [

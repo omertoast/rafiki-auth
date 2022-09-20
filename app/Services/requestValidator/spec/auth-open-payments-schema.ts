@@ -62,27 +62,10 @@ export interface components {
       | components["schemas"]["access-outgoing"]
       | components["schemas"]["access-quote"];
     /**
-     * limits-outgoing-recurring
-     * @description Open Payments specific property that defines the limits under which outgoing payments can be created.
-     */
-    "limits-outgoing-recurring": {
-      /**
-       * Format: uri
-       * @description URL for the incoming payment or ILP STREAM Connection.
-       */
-      receiver?: string;
-      sendAmount: components["schemas"]["amount"];
-      receiveAmount: components["schemas"]["amount"];
-      /** @description [ISO8601 repeating interval](https://en.wikipedia.org/wiki/ISO_8601#Repeating_intervals) */
-      interval: string;
-    } & {
-      oneOf: unknown;
-    };
-    /**
      * limits-outgoing
      * @description Open Payments specific property that defines the limits under which outgoing payments can be created.
      */
-    "limits-outgoing": {
+    "limits-outgoing": Partial<unknown> & {
       /**
        * Format: uri
        * @description URL for the incoming payment or ILP STREAM Connection.
@@ -253,9 +236,7 @@ export interface components {
        * @description A string identifier indicating a specific resource at the RS.
        */
       identifier: string;
-      limits?:
-        | components["schemas"]["limits-outgoing"]
-        | components["schemas"]["limits-outgoing-recurring"];
+      limits?: components["schemas"]["limits-outgoing"];
     };
     /** access-incoming */
     "access-incoming": {
