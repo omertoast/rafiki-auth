@@ -1,23 +1,49 @@
-import { createOpenAPI, OpenAPI, HttpMethod } from "openapi"
+import { createOpenAPI, OpenAPI, HttpMethod, ValidateFunction } from "openapi"
 import * as openapiTypes from 'openapi-types';
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext"
 
 interface ServiceDependencies {
-	spec: OpenAPI
+	spec: OpenAPI,
+	requestValidators: Map<PathMethod, ValidateFunction<openapiTypes.OpenAPI.Request>>
 }
 
 interface ServiceArgs {
-	specPath: string
+	specPath: string,
+}
+
+interface PathMethod {
+	path: string
+	method: string
 }
 
 export interface RequestValidatorService {
 	requestValidator: <T>(ctx: HttpContextContract) => Promise<T>
 }
 
+// TODO:
+// - automate static type checking
+// - figure out using the validator once and pass the parsed value between middlewares and controllers
 export const NewService = async (args: ServiceArgs): Promise<RequestValidatorService> => {
 	const spec = await createOpenAPI(args.specPath)
+
+	const requestValidators = new Map<PathMethod, ValidateFunction<openapiTypes.OpenAPI.Request>>()
+
+	Object.keys(spec.paths).forEach((path) => {
+		Object.keys(spec.paths[path]).forEach((method) => {
+			if (method === 'parameters') return
+			requestValidators.set({
+				path,
+				method: method.toUpperCase()
+			}, spec.createRequestValidator<openapiTypes.OpenAPI.Request>({
+				path,
+				method: method as HttpMethod
+			}))
+		})
+	})
+
 	const deps: ServiceDependencies = {
-		spec
+		spec,
+		requestValidators
 	}
 
 	return {
@@ -29,10 +55,14 @@ const requestValidator = async <T>(deps: ServiceDependencies, ctx: HttpContextCo
 	const { request, route } = ctx
 	const path = routeToPath(route?.pattern || '')
 
-	const requestValidator = deps.spec.createRequestValidator<openapiTypes.OpenAPI.Request>({
+	const requestValidator = deps.requestValidators.get({
 		path: path,
-		method: request.method().toLocaleLowerCase() as HttpMethod
+		method: request.method()
 	})
+
+	if (!requestValidator) {
+		throw new Error('no request validator found')
+	}
 
 	const openAPIRequest: openapiTypes.OpenAPI.Request = {
 		headers: request.headers(),
