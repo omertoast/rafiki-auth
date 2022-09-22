@@ -22,7 +22,10 @@
     "@adonisjs/core",
     "@adonisjs/lucid",
     "@adonisjs/auth",
-    "./app/Services/requestValidator/provider"
+    "./app/Services/requestValidator/provider",
+    "./app/Services/token/provider",
+    "./app/Services/client/provider",
+    "./app/Services/grant/provider"
   ],
   "aceProviders": [
     "@adonisjs/repl"

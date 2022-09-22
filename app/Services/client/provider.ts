@@ -1,13 +1,12 @@
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
-import { NewService } from './service'
 
 export default class AppProvider {
   constructor(protected app: ApplicationContract) {}
 
   public async register() {
-    const Config = this.app.container.use('Adonis/Core/Config')
-
+    const { NewService } = await import('./service')
     const clientService = await NewService()
+
 		this.app.container.singleton('Rafiki/Auth/Client', () => {
 			return clientService
 		})
