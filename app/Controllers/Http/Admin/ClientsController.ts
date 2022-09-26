@@ -20,9 +20,8 @@ export default class ClientsController {
   }
 
   public async update({ request, response }: HttpContextContract) {
-
     const client = await Client.find(request.param('id'))
-    if(!client) {
+    if (!client) {
       response.notFound()
       return
     }
@@ -33,7 +32,7 @@ export default class ClientsController {
 
   public async destroy({ request, response }: HttpContextContract) {
     const client = await Client.find(request.param('id'))
-    if(!client) {
+    if (!client) {
       response.notFound()
       return
     }

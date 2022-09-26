@@ -455,7 +455,7 @@ paths:
               schema:
                 type: string
               description: Client finish endpoint
-      description: 'To finish the user interaction for grant approval, this endpoint redirects to the client''s finish url.'
+      description: "To finish the user interaction for grant approval, this endpoint redirects to the client's finish url."
       tags:
         - interaction
         - grant
@@ -581,9 +581,9 @@ components:
             required:
               - interval
         - required:
-          - sendAmount
+            - sendAmount
         - required:
-          - receiveAmount
+            - receiveAmount
     amount:
       title: amount
       type: object

@@ -11,5 +11,4 @@ export default class GrantsController {
   public async update({}: HttpContextContract) {}
 
   public async destroy({}: HttpContextContract) {}
-
 }

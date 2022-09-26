@@ -1,6 +1,6 @@
-declare module "@ioc:Rafiki/Auth/Client" {
-	import { ClientService } from "App/Services/client/service"
+declare module '@ioc:Rafiki/Auth/ClientService' {
+  import { ClientService } from 'App/Services/client/service'
 
-	const Client: ClientService
-	export default Client
+  const ClientService: ClientService
+  export default ClientService
 }

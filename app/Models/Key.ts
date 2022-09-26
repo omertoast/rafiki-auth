@@ -4,7 +4,6 @@ import { BaseModel, beforeCreate, BelongsTo, belongsTo, column } from '@ioc:Adon
 import Client from './Client'
 
 export default class Key extends BaseModel {
-  
   public static selfAssignPrimaryKey = true
 
   @beforeCreate()

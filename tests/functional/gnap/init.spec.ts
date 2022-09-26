@@ -6,7 +6,7 @@ import * as crypto from 'crypto'
 
 export const TEST_CLIENT_DISPLAY = {
   name: 'Test Client',
-  uri: 'https://example.com'
+  uri: 'https://example.com',
 }
 
 export const KEY_REGISTRY_ORIGIN = 'https://openpayments.network'
@@ -21,8 +21,8 @@ export const TEST_CLIENT_KEY = {
     alg: 'EdDSA',
     crv: 'Ed25519',
     key_ops: ['sign', 'verify'],
-    use: 'sig'
-  }
+    use: 'sig',
+  },
 }
 
 const BASE_GRANT_REQUEST = {
@@ -32,29 +32,32 @@ const BASE_GRANT_REQUEST = {
         type: AccessType.IncomingPayment,
         actions: [Action.Create, Action.Read, Action.List],
         locations: ['https://example.com'],
-        identifier: `https://example.com/${v4()}`
-      }
-    ]
+        identifier: `https://example.com/${v4()}`,
+      },
+    ],
   },
   client: {
     display: TEST_CLIENT_DISPLAY,
-    key: TEST_CLIENT_KEY
+    key: TEST_CLIENT_KEY,
   },
   interact: {
     start: [StartMethod.Redirect],
     finish: {
       method: FinishMethod.Redirect,
       uri: 'https://example.com/finish',
-      nonce: crypto.randomBytes(8).toString('hex').toUpperCase()
-    }
-  }
+      nonce: crypto.randomBytes(8).toString('hex').toUpperCase(),
+    },
+  },
 }
 
 test('request grant', async ({ client }) => {
-  const response = await client.post('/gnap',).headers({
-    'Content-Type': 'application/json',
-    'Accepts': 'application/json'
-  }).json(BASE_GRANT_REQUEST)
+  const response = await client
+    .post('/gnap')
+    .headers({
+      'Content-Type': 'application/json',
+      'Accepts': 'application/json',
+    })
+    .json(BASE_GRANT_REQUEST)
 
   console.log(response.body())
 
@@ -62,12 +65,15 @@ test('request grant', async ({ client }) => {
 })
 
 test('continue grant', async ({ client }) => {
-  const response = await client.post('/gnap/continue/1',).headers({
-    'Content-Type': 'application/json',
-    'Accepts': 'application/json'
-  }).json({
-    invalid_body: "12312"
-  })
+  const response = await client
+    .post('/gnap/continue/1')
+    .headers({
+      'Content-Type': 'application/json',
+      'Accepts': 'application/json',
+    })
+    .json({
+      invalid_body: '12312',
+    })
 
   console.log(response.body())
 

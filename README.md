@@ -3,6 +3,7 @@
 The Open Payments APIs leverage the Grant Negotiation and Authorization (GNAP) standard.
 
 This server is an implementation of a GNAP authorization server (AS) specifically for Open Payments.
+
 - https://datatracker.ietf.org/doc/html/draft-ietf-gnap-core-protocol
 
 The AS is an essential component of a GNAP (Grant Negotiation and Authorization Protocol) system. Clients wishing to access APIs at a resource server (RS) must request a grant from the AS first. If necessary the AS will require the client to get authorization from the resource owner (RO) before issuing the grant.
@@ -10,15 +11,17 @@ The AS is an essential component of a GNAP (Grant Negotiation and Authorization 
 Open Payments uses a limited profile of GNAP, only supporting a limited set of interaction modes, key types, signature algorithms and client identification mechanisms.
 
 The GNAP APIs implemented by the server are documented in an Open API specification here:
+
 - https://github.com/interledger/open-payments/blob/master/auth-server-open-api-spec.yaml
 
 ## Interfaces
 
 This implementation of an AS has 4 interfaces:
- 1. A public GNAP AS interface through which clients request and negotiate the issuance of grants.
- 2. A private interface used by an identity provider that is able to authenticate resource owners (RO) and present them with the details of a grant request so that they can provide their consent to the issuance of the grant.
- 3. A private interface through which an RS can introspect tokens issued by the AS to get the details of the grant and client.
- 4. A private admin interface through which internal systems can administer the grants, tokens, clients and keys.
+
+1.  A public GNAP AS interface through which clients request and negotiate the issuance of grants.
+2.  A private interface used by an identity provider that is able to authenticate resource owners (RO) and present them with the details of a grant request so that they can provide their consent to the issuance of the grant.
+3.  A private interface through which an RS can introspect tokens issued by the AS to get the details of the grant and client.
+4.  A private admin interface through which internal systems can administer the grants, tokens, clients and keys.
 
 ### Public - Standard GNAP AS interface
 
@@ -87,7 +90,6 @@ Finish an interaction. This API is intended to be accessed via the backend by th
 
 This API is used to post the details of RO's input on the consent screen.
 
-
 ## Local Development
 
 The application is built on [AdonisJS](https://docs.adonisjs.com/).
@@ -97,8 +99,6 @@ It can be setup by simply running pnpm install.
 Until [this PR](https://github.com/dhensby/node-http-message-signatures/pull/3) is merged you'll need a local copy of the http-message-signatures package in the same parent folder as this one.
 
 It's also necessary to create a `tmp` folder where the SQLite db file will reside.
-
-
 
 ```shell
 git clone https://github.com/interledger/http-message-signatures
@@ -124,7 +124,7 @@ node ace test
 Use [ACE](https://docs.adonisjs.com/guides/ace-commandline) to run a dev server with a local Sqlite DB.
 
 ```shell
-node ace serve -w  
+node ace serve -w
 ```
 
 ## Tests

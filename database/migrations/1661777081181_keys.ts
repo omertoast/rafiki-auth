@@ -3,14 +3,13 @@ import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 export default class extends BaseSchema {
   protected tableName = 'keys'
 
-  public async up () {
+  public async up() {
     this.schema.createTable(this.tableName, (table) => {
-
       // TODO - Unique constraint (and index?) on (client_id, kid)
 
       table.uuid('id').notNullable().primary()
       table.uuid('client_id').references('id').inTable('clients').onDelete('CASCADE')
-      
+
       table.string('kid').notNullable()
       table.json('jwk').notNullable()
 
@@ -19,7 +18,7 @@ export default class extends BaseSchema {
     })
   }
 
-  public async down () {
+  public async down() {
     this.schema.dropTable(this.tableName)
   }
 }

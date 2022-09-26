@@ -1,6 +1,6 @@
-declare module "@ioc:Rafiki/Auth/RequestValidator" {
-	import { RequestValidatorService } from "App/Services/requestValidator/service"
+declare module '@ioc:Rafiki/Auth/RequestValidator' {
+  import { RequestValidatorService } from 'App/Services/requestValidator/service'
 
-	const RequestValidator: RequestValidatorService
-	export default RequestValidator
+  const RequestValidator: RequestValidatorService
+  export default RequestValidator
 }

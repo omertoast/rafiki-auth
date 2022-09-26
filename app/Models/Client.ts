@@ -5,7 +5,6 @@ import Key from './Key'
 import Grant from './Grant'
 
 export default class Client extends BaseModel {
-  
   public static selfAssignPrimaryKey = true
 
   @beforeCreate()
@@ -19,7 +18,7 @@ export default class Client extends BaseModel {
   @column()
   public url: string
 
-// Relations
+  // Relations
 
   @hasMany(() => Key)
   public keys: HasMany<typeof Key>
@@ -34,5 +33,4 @@ export default class Client extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-
 }

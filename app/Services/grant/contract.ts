@@ -1,6 +1,6 @@
-declare module "@ioc:Rafiki/Auth/Grant" {
-	import { GrantService } from "App/Services/grant/service"
+declare module '@ioc:Rafiki/Auth/GrantService' {
+  import { GrantService } from 'App/Services/grant/service'
 
-	const Grant: GrantService
-	export default Grant
+  const GrantService: GrantService
+  export default GrantService
 }

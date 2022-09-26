@@ -28,54 +28,56 @@ Route.group(() => {
   Route.resource('grants', 'GrantsController').apiOnly()
   Route.resource('tokens', 'TokensController').apiOnly()
 })
-.prefix('/admin')
-.namespace('App/Controllers/Http/Admin')
+  .prefix('/admin')
+  .namespace('App/Controllers/Http/Admin')
 
 /**
  * These routes handle the GNAP protocol
  */
 Route.group(() => {
-  Route.post('/', 'GnapController.requestGrant')
+  Route.post('/', 'GrantController.requestGrant')
+    .as('createRequest')
+    .middleware('client:init')
+    .middleware('signature')
 
   Route.group(() => {
-    Route.post('/continue/:id', 'GnapController.continueGrant')
-    Route.patch('/continue/:id', 'GnapController.updateGrant')
-    Route.delete('/continue/:id', 'GnapController.revokeGrant')
+    Route.post('/continue/:id', 'GrantController.continueGrant').as('continueRequest')
+    Route.patch('/continue/:id', 'GrantController.updateGrant').as('updateRequest')
+    Route.delete('/continue/:id', 'GrantController.revokeGrant').as('revokeRequest')
   })
+    .middleware('client:continue')
+    .middleware('signature')
 
-  Route.post('/token/:id', 'GnapController.rotateToken' )
-  Route.delete('/token/:id', 'GnapController.revokeToken' )
-  .middleware('client:token')
-  .middleware('signature')
-
+  Route.group(() => {
+    Route.post('/token/:id', 'TokenController.rotateToken').as('rotateToken')
+    Route.delete('/token/:id', 'TokenController.revokeToken').as('revokeToken')
+  })
+    .middleware('client:token')
+    .middleware('signature')
 })
-.middleware('json-only')
-.prefix('/gnap')
-.namespace('App/Controllers/Http/Gnap')
+  .middleware('json-only')
+  .prefix('/gnap')
+  .as('gnap')
+  .namespace('App/Controllers/Http/Gnap')
 
 /**
  * These routes are for interactions between the AS and the IdP
- * 
+ *
  */
 Route.group(() => {
   Route.group(() => {
     Route.get('/interact/:id/start/:nonce', 'InteractionsController.start')
     Route.get('/interact/:id/finish/:nonce', 'InteractionsController.finish')
-  })
-  .prefix('/frontend')
-  
+  }).prefix('/frontend')
+
   Route.group(() => {
     Route.get('/interact/:interact', 'ConsentController.start')
     Route.post('/interact/:interact', 'ConsentController.finish')
-  })
-  .prefix('/backend')
-})
-.namespace('App/Controllers/Http/IdentityProvider')
+  }).prefix('/backend')
+}).namespace('App/Controllers/Http/IdentityProvider')
 
 Route.group(() => {
   Route.get('/', 'IntrospectController.introspect')
 })
-.prefix('/introspect')
-.namespace('App/Controllers/Http/ResourceServer')
-
-
+  .prefix('/introspect')
+  .namespace('App/Controllers/Http/ResourceServer')
