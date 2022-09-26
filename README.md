@@ -106,14 +106,14 @@ cd http-message-signatures
 npm i
 npm run build
 cd ..
-git clone https://github.com/interledger/structured-headers
-cd http-message-signatures
-npm i
-npm run build
+git clone https://github/com/interledger/rafiki
+cd rafiki
+pnpm i
+pnpm --filter openapi build
 cd ..
 git clone https://github.com/adrianhopebailie/rafiki-auth
 cd rafiki-auth
-pnpm i
+npm i
 cp .env.example .env
 mkdir tmp
 node ace migration:run
