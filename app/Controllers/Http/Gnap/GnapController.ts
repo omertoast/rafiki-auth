@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import RequestValidator from '@ioc:Rafiki/Auth/RequestValidator';
+import Token from '@ioc:Rafiki/Auth/Token';
 import { paths } from 'App/Services/requestValidator/spec/auth-open-payments-schema';
 
 // GnapController sits behind the '/gnap' route to handle the implementation of the GNAP protocol
@@ -14,7 +15,11 @@ export default class GnapController {
         }
       })
 
-    return ctx.response.ok({body})
+    const token = Token.create({
+      grantId: "1234"
+    })
+
+    return ctx.response.ok({token})
   }
 
   // https://www.ietf.org/archive/id/draft-ietf-gnap-core-protocol-10.html#name-continuing-a-grant-request

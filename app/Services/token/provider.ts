@@ -4,10 +4,10 @@ export default class AppProvider {
   constructor(protected app: ApplicationContract) {}
 
   public async register() {
-    const { NewService } = await import('./service')
-    const tokenService = await NewService()
+		this.app.container.singleton('Rafiki/Auth/Token', async () => {
+      const { NewService } = await import('./service')
+      const tokenService = await NewService()
 
-		this.app.container.singleton('Rafiki/Auth/Token', () => {
       return tokenService
 		})
   }

@@ -15,7 +15,7 @@ interface ServiceOptions {
 
 export interface TokenService {
 	create: (opts: CreateTokenOptions) => Promise<AccessToken>,
-	rotate: (opts: RotateTokenOptions) => Promise<unknown>,
+	rotate: (opts: RotateTokenOptions) => Promise<RotatedToken>,
 	revoke: (opts: RevokeTokenOptions) => Promise<string>, // returns managementId
 	introspect: (opts: IntrospectTokenOptions) => Promise<unknown>
 }
@@ -65,7 +65,16 @@ interface RotateTokenOptions {
 	trx?: TransactionClientContract
 }
 
-const rotateToken = async (deps: ServiceDependencies, opts: RotateTokenOptions) => {
+
+interface RotatedToken {
+	success: boolean,
+	access: GrantAccess,
+	value: string,
+	managementId: string,
+	expiresIn: number
+}
+
+const rotateToken = async (deps: ServiceDependencies, opts: RotateTokenOptions): Promise<RotatedToken> => {
 	const token = await AccessToken.findByOrFail('managementId', opts.managementId, {client: opts.trx})
 	await token.delete()
 
